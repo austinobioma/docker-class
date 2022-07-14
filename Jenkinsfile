@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Git checkout') {
             steps {
-                git 'https://github.com/austinobioma/docker-class.git'
+                git branch: 'main', url: 'https://github.com/austinobioma/docker-class.git'
             }
         }
       stage('Build') {
