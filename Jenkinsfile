@@ -18,17 +18,19 @@ pipeline {
             }
         }
         stage ('SSH To RemoteServer') {
-               sshPublisher(publishers: 
+            steps {
+                  sshPublisher(publishers: 
                    [sshPublisherDesc
                       (configName: 'App_Server', 
                         transfers: 
-                         [sshTransfer(cleanRemote: false, 
-                               excludes: '', 
-                                   execCommand: 
-                                      'docker build -t tomcat .', 
-                                      execTimeout: 120000, 
-                                      flatten: false, 
-                                     makeEmptyDirs: false, 
+                         [sshTransfer
+                          (cleanRemote: false, 
+                            excludes: '', 
+                             execCommand: 
+                              'docker build -t tomcat . && docker run -d -p 8080:8080 tomcat', 
+                                execTimeout: 120000, 
+                                 flatten: false, 
+                                  makeEmptyDirs: false, 
                                    noDefaultExcludes: false, 
                                  patternSeparator: '[, ]+', 
                                remoteDirectory: '/home/ubuntu', 
@@ -41,6 +43,7 @@ pipeline {
                       )
                    ]
                  )  
+            }
         } 
       stage('Building Docker image') {
           steps{
