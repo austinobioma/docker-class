@@ -14,9 +14,34 @@ pipeline {
       stage('Mvn Build') {
             steps {
                 sh 'cd webapp && mvn clean package'
-                sh 'cd webapp && mvn clean install -DskipTests'
+                sh 'cd webapp && mvn clean install -DskipTests'  
             }
         }
+        stage ('SSH To RemoteServer') {
+               sshPublisher(publishers: 
+                   [sshPublisherDesc
+                      (configName: 'App_Server', 
+                        transfers: 
+                         [sshTransfer(cleanRemote: false, 
+                               excludes: '', 
+                                   execCommand: 
+                                      'docker build -t tomcat .', 
+                                      execTimeout: 120000, 
+                                      flatten: false, 
+                                     makeEmptyDirs: false, 
+                                   noDefaultExcludes: false, 
+                                 patternSeparator: '[, ]+', 
+                               remoteDirectory: '/home/ubuntu', 
+                              remoteDirectorySDF: false,
+                           removePrefix: '', 
+                        sourceFiles: './webapp.war')], 
+                       usePromotionTimestamp: false, 
+                       useWorkspaceInPromotion: false, 
+                       verbose: false
+                      )
+                   ]
+                 )  
+        } 
       stage('Building Docker image') {
           steps{
                 script {
