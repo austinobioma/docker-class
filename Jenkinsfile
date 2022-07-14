@@ -36,7 +36,7 @@ pipeline {
                                remoteDirectory: '/home/ubuntu', 
                               remoteDirectorySDF: false,
                            removePrefix: '', 
-                        sourceFiles: './webapp.war')], 
+                        sourceFiles: '/var/lib/jenkins/workspace/docker-build/webapp/target/webapp.war')], 
                        usePromotionTimestamp: false, 
                        useWorkspaceInPromotion: false, 
                        verbose: false
