@@ -14,7 +14,7 @@ pipeline {
         }
       stage('Test') {
             steps {
-                sh 'cd webapp && mvn test'
+                sh 'cd webapp && mvn clean install -DskipTests'
             }
         }
     }
