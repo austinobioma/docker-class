@@ -13,6 +13,7 @@ pipeline {
         }
       stage('Mvn Build') {
             steps {
+                sh 'cd webapp && mvn clean package'
                 sh 'cd webapp && mvn clean install -DskipTests'
             }
         }
