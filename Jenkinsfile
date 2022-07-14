@@ -1,40 +1,44 @@
 pipeline {
     agent any
-
+    environment {
+       imagename = "austinobioma/tomcat"
+       registryCredential = 'DockerHub'
+       dockerImage = ''
+           }
     stages {
         stage('Git checkout') {
             steps {
-                git 'https://github.com/austinobioma/docker-class.git'
+               git branch: 'main', url: 'https://github.com/austinobioma/docker-class.git'
             }
         }
-      stage('Build') {
+      stage('Mvn Build') {
             steps {
-               sh 'cd webapp && mvn clean  package'
+                sh 'cd webapp && mvn clean package'
+                sh 'cd webapp && mvn clean install -DskipTests'
             }
         }
-      stage('Test') {
-            steps {
-                sh 'cd webapp && mvn test'
-            }
-        }
-     stage ('Code Qualty Scan') {
-            steps {
-               withSonarQubeEnv('sonar') 
-               {
-              sh "mvn -f webapp/pom.xml sonar:sonar"
-            }
+      stage('Building Docker image') {
+          steps{
+                script {
+                     dockerImage = docker.build imagename
+                          }
+                      }
                 }
+     stage('Deploy Image') {
+           steps{
+               script {
+                    docker.withRegistry( '', registryCredential ) {
+                    dockerImage.push("$BUILD_NUMBER")
+                    dockerImage.push('latest')
+                                              }
+                                    }
+                             }
+                  }
+     stage('Remove Unused docker image') {
+          steps{
+              sh "docker rmi $imagename:$BUILD_NUMBER"
+              sh "docker rmi $imagename:latest"
+                        }
+                  }  
+             }
         }
-     stage ('Quality gate') {
-            steps {
-              waitforQualityGate abortPipeline: true
-            }
-        }
-          stage ('Deploy to tomcat') {
-
-            steps {
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'tomcat-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ansible-playbook -i hosts myplaybook.yml --limit ubuntu@54.166.138.252', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-                }
-            }
-          }
-}
