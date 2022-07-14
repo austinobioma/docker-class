@@ -22,16 +22,12 @@ pipeline {
             }
         }
       stage('Building Docker image') {
-          agent {
-              dockerfile{
           steps{
                 script {
                      dockerImage = docker.build imagename
                           }
                       }
-                   }
-               }
-            }
+                }
      stage('Deploy Image') {
            steps{
                script {
@@ -47,6 +43,6 @@ pipeline {
               sh "docker rmi $imagename:$BUILD_NUMBER"
               sh "docker rmi $imagename:latest"
                         }
-               }  
-       }
-  }
+                  }  
+             }
+        }
