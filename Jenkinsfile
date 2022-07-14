@@ -20,29 +20,15 @@ pipeline {
         stage ('SSH To RemoteServer') {
             steps {
                   sshPublisher(publishers: 
-                   [sshPublisherDesc
-                      (configName: 'App_Server', 
-                        transfers: 
-                         [sshTransfer
-                          (cleanRemote: false, 
-                            excludes: '', 
-                             execCommand: 
-                              'docker build -t tomcat . && docker run -d -p 8080:8080 tomcat', 
-                                execTimeout: 120000, 
-                                 flatten: false, 
-                                  makeEmptyDirs: false, 
-                                   noDefaultExcludes: false, 
-                                 patternSeparator: '[, ]+', 
-                               remoteDirectory: '/home/ubuntu', 
-                              remoteDirectorySDF: false,
-                           removePrefix: '', 
-                        sourceFiles: '/var/lib/jenkins/workspace/docker-build/webapp/target/webapp.war')], 
-                       usePromotionTimestamp: false, 
-                       useWorkspaceInPromotion: false, 
-                       verbose: false
-                      )
-                   ]
-                 )  
+                               [sshPublisherDesc(configName: 'App_Server', 
+                                                 transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', 
+                                                                         execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
+                                                                        patternSeparator: '[, ]+', remoteDirectory: '/home/ubuntu', remoteDirectorySDF: false, 
+                                                                         removePrefix: '/workspace/docker-build/webapp/target', sourceFiles: '\'**/*.war\'')], 
+                                                 usePromotionTimestamp: false, useWorkspaceInPromotion: false, 
+                                                 verbose: true)
+                               ]
+                              )
             }
         } 
       stage('Building Docker image') {
