@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
        imagename = "austinobioma/tomcat"
-       registryCredentialId = 'DockerHub'
+       registryCredential = 'DockerHub'
        dockerImage = ''
            }
     stages {
