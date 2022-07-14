@@ -21,13 +21,17 @@ pipeline {
                 sh 'cd webapp && mvn clean install -DskipTests'
             }
         }
-      stage('Building image') {
-           steps{
+      stage('Building Docker image') {
+          agent {
+              docker{
+          steps{
                 script {
                      dockerImage = docker.build imagename
-                       }
+                          }
+                      }
                    }
-          }
+               }
+            }
      stage('Deploy Image') {
            steps{
                script {
