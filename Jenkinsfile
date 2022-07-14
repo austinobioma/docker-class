@@ -11,12 +11,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/austinobioma/docker-class.git'
             }
         }
-      stage('Build') {
-            steps {
-               sh 'cd webapp && mvn clean  package'
-            }
-        }
-      stage('Test') {
+      stage('Mvn Build') {
             steps {
                 sh 'cd webapp && mvn clean install -DskipTests'
             }
