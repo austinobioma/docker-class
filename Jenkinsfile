@@ -16,6 +16,7 @@ pipeline {
                 sh 'cd webapp && mvn clean package'
                 sh 'cd webapp && mvn clean install -DskipTests'  
             }
+            }
      stage('Copy Files to Ubuntu Home') {
             steps{
                   sh 'cd /var/lib/jenkins/workspace/docker-build/webapp/target && cp ./webapp.war /home/ubuntu'
