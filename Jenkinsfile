@@ -16,6 +16,10 @@ pipeline {
                 sh 'cd webapp && mvn clean package'
                 sh 'cd webapp && mvn clean install -DskipTests'  
             }
+          stage('Copy Files to Ubuntu Home') {
+              steps{
+                  sh 'cd /var/lib/jenkins/workspace/docker-build/webapp/target && cp ./webapp.war /home/ubuntu'}
+                   }
         }
         stage ('SSH To RemoteServer') {
             steps {
@@ -24,7 +28,7 @@ pipeline {
                                                  transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', 
                                                                          execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
                                                                         patternSeparator: '[, ]+', remoteDirectory: '/home/ubuntu', remoteDirectorySDF: false, 
-                                                                         removePrefix: '/workspace/docker-build/webapp/target', sourceFiles: '\'**/*.war\'')], 
+                                                                         removePrefix: '/home/ubuntu', sourceFiles: '\'**/*.war\'')], 
                                                  usePromotionTimestamp: false, useWorkspaceInPromotion: false, 
                                                  verbose: true)
                                ]
