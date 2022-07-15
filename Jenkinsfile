@@ -28,7 +28,7 @@ pipeline {
             steps {
                   sshPublisher(publishers: 
                                [sshPublisherDesc(configName: 'App_Server', 
-                                                 transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'cp **/*.war /home/ubuntu', 
+                                                 transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', 
                                                                          execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
                                                                         patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, 
                                                                          removePrefix: '/webapp/target', sourceFiles: 'webapp/target/webapp.war\'')], 
