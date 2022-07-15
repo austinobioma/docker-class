@@ -17,6 +17,13 @@ pipeline {
                 sh 'cd webapp && mvn clean install -DskipTests'  
             }
          } 
+        stage('Deploy To Tomcat') {
+            steps {
+                script{
+                deploy adapters: [tomcat9(credentialsId: 'Deployer', path: '', url: 'http://3.84.2.133:8080')], contextPath: '/web', onFailure: false, war: '"**/*.war"'
+                }
+            }
+        }
         stage ('SSH To RemoteServer') {
             steps {
                   sshPublisher(publishers: 
