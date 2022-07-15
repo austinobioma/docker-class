@@ -16,14 +16,7 @@ pipeline {
                 sh 'cd webapp && mvn clean package'
                 sh 'cd webapp && mvn clean install -DskipTests'  
             }
-         }
-     stage('Copy Files to Ubuntu Home') {
-            steps{
-                  //sh 'cd /home/ubuntu && chmod g+x home/ubuntu'
-                  sh 'cd /webapp/target && cp ./webapp.war ubuntu'
-                     }
-         }
-              
+         } 
         stage ('SSH To RemoteServer') {
             steps {
                   sshPublisher(publishers: 
