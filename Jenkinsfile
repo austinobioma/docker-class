@@ -19,6 +19,7 @@ pipeline {
          }
      stage('Copy Files to Ubuntu Home') {
             steps{
+                  sh 'chmod g+x home/ubuntu'
                   sh 'cd /var/lib/jenkins/workspace/docker-build/webapp/target && cp ./webapp.war /home/ubuntu'
                      }
          }
