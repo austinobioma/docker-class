@@ -16,13 +16,13 @@ pipeline {
                 sh 'cd webapp && mvn clean package'
                 sh 'cd webapp && mvn clean install -DskipTests'  
             }
-            }
+         }
      stage('Copy Files to Ubuntu Home') {
             steps{
                   sh 'cd /var/lib/jenkins/workspace/docker-build/webapp/target && cp ./webapp.war /home/ubuntu'
                      }
-                   }
-              }
+         }
+              
         stage ('SSH To RemoteServer') {
             steps {
                   sshPublisher(publishers: 
@@ -35,7 +35,7 @@ pipeline {
                                                  verbose: true)
                                ]
                               )
-            }
+               }
         } 
       stage('Building Docker image') {
           steps{
@@ -59,6 +59,6 @@ pipeline {
               sh "docker rmi $imagename:$BUILD_NUMBER"
               sh "docker rmi $imagename:latest"
                         }
-                  }  
-             }
-        }
+            }
+     }  
+ }
